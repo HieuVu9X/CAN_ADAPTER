@@ -1,0 +1,9 @@
+Board Information Report
+Filename     : C:\Users\Admin\OneDrive\Desktop\hieuvm6\14.DLU_PPK57_V2.0\DLU_PPK57_V2.0.PcbDoc
+Date         : 4/1/2025
+Time         : 8:27:48 PM
+Time Elapsed : 00:00:00
+
+Net Track Width, Count
+    0.2032mm, 167
+count : 1

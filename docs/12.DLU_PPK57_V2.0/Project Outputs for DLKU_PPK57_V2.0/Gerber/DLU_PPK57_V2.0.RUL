@@ -1,0 +1,9 @@
+DRC Rules Export File for PCB: C:\Users\Hieuvm6\Desktop\hieuvm6\14.DLU_PPK57_V2.0\DLU_PPK57_V2.0.PcbDoc
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=8.00
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=8.00
+RuleKind=Clearance|RuleName=POLYGON_NET|Scope=Board|Minimum=20.00
+RuleKind=Clearance|RuleName=POLYGON_POWER_NET|Scope=Board|Minimum=39.37
+RuleKind=Clearance|RuleName=KEEP_OUT|Scope=Board|Minimum=0.39
+RuleKind=Clearance|RuleName=VIA3_KEEPOUT|Scope=Board|Minimum=0.00

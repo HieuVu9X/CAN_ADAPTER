@@ -1,0 +1,16 @@
+Project Outputs Generation Report
+---------------------------------
+Start Output Generation At 10:57:52 AM On 3/24/2025
+
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [DLU_PPK57_V2.0.PcbDoc]
+   Generated File[DLU_PPK57_V2.0.TXT]
+   Generated File[DLU_PPK57_V2.0.LDP]
+   Generated File[DLU_PPK57_V2.0.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 10:57:53 AM On 3/24/2025
