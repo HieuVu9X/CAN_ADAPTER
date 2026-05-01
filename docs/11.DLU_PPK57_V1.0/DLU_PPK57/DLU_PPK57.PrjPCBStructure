@@ -1,1 +1,4 @@
-Record=TopLevelDocument|FileName=[1]-Power.SchDoc
+Record=TopLevelDocument|FileName=[1]-Power.SchDoc|SheetNumber=1
+Record=NoMainPathDocument|SourceDocument=[1]-Power.SchDoc|FileName=[2]-MCU.SchDoc|SheetNumber=2
+Record=NoMainPathDocument|SourceDocument=[1]-Power.SchDoc|FileName=[3]-Digital Input.SchDoc|SheetNumber=3
+Record=NoMainPathDocument|SourceDocument=[1]-Power.SchDoc|FileName=[4]-GPS_SIM_SSD.SchDoc|SheetNumber=4
