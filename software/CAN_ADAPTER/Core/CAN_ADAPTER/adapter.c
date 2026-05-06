@@ -128,7 +128,6 @@ void Can_Adapter_Mainfunction(void)
 	/*** send data from usb to uart ***/
 	Send_USART_OUT();
 
-
 	/*** send data from uart to usb ***/
 	usart_sr = USART1->ISR;
 	uint32_t dma_cnt = USART_RX_DMA_STREAM->CNDTR;
@@ -139,14 +138,14 @@ void Can_Adapter_Mainfunction(void)
 	uint32_t cur_tick = HAL_GetTick();
 	uint32_t time_diff = (cur_tick-last_tick)&0xffff;
 
-	if(in_wr_index != in_rd_index && (time_diff >=2 || in_pending >= 128)){
+	if(in_wr_index != in_rd_index && (time_diff >=2 || in_pending >= 128)) {
 		last_tick = HAL_GetTick();
-		if(in_wr_index > in_rd_index){
-				CDC_Transmit_FS(in_queue+in_rd_index,in_wr_index - in_rd_index);
+		if(in_wr_index > in_rd_index) {
+			CDC_Transmit_FS(in_queue+in_rd_index,in_wr_index - in_rd_index);
 			in_rd_index = in_wr_index;
 		}
-		else{
-				CDC_Transmit_FS(in_queue+in_rd_index,QUEUE_BUF_SIZE - in_rd_index);
+		else {
+			CDC_Transmit_FS(in_queue+in_rd_index,QUEUE_BUF_SIZE - in_rd_index);
 			in_rd_index = 0;
 		}
 	}
