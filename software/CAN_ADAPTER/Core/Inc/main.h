@@ -29,6 +29,18 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g4xx_hal.h"
 
+#include "stm32g4xx_ll_rcc.h"
+#include "stm32g4xx_ll_bus.h"
+#include "stm32g4xx_ll_crs.h"
+#include "stm32g4xx_ll_system.h"
+#include "stm32g4xx_ll_exti.h"
+#include "stm32g4xx_ll_cortex.h"
+#include "stm32g4xx_ll_utils.h"
+#include "stm32g4xx_ll_pwr.h"
+#include "stm32g4xx_ll_dma.h"
+#include "stm32g4xx_ll_usart.h"
+#include "stm32g4xx_ll_gpio.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -57,21 +69,15 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define MCU_LED_Pin GPIO_PIN_13
+#define MCU_LED_Pin LL_GPIO_PIN_13
 #define MCU_LED_GPIO_Port GPIOC
-#define RS485_DE_Pin GPIO_PIN_1
-#define RS485_DE_GPIO_Port GPIOA
-#define RS485_TX_Pin GPIO_PIN_2
-#define RS485_TX_GPIO_Port GPIOA
-#define RS485_RX_Pin GPIO_PIN_3
-#define RS485_RX_GPIO_Port GPIOA
-#define UART_TX_Pin GPIO_PIN_6
+#define UART_TX_Pin LL_GPIO_PIN_6
 #define UART_TX_GPIO_Port GPIOB
-#define UART_RX_Pin GPIO_PIN_7
+#define UART_RX_Pin LL_GPIO_PIN_7
 #define UART_RX_GPIO_Port GPIOB
-#define CAN_RX_Pin GPIO_PIN_8
+#define CAN_RX_Pin LL_GPIO_PIN_8
 #define CAN_RX_GPIO_Port GPIOB
-#define CAN_TX_Pin GPIO_PIN_9
+#define CAN_TX_Pin LL_GPIO_PIN_9
 #define CAN_TX_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */

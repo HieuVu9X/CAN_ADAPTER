@@ -27,7 +27,7 @@
 #include "usbd_cdc.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "stm32g4xx_ll_rcc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -72,21 +72,12 @@ static void HAL_PCD_MspInit(PCD_HandleTypeDef* pcdHandle)
 void HAL_PCD_MspInit(PCD_HandleTypeDef* pcdHandle)
 #endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
   if(pcdHandle->Instance==USB)
   {
   /* USER CODE BEGIN USB_MspInit 0 */
 
   /* USER CODE END USB_MspInit 0 */
-
-  /** Initializes the peripherals clocks
-  */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-    PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-    {
-      Error_Handler();
-    }
+    LL_RCC_SetUSBClockSource(LL_RCC_USB_CLKSOURCE_HSI48);
 
     /* Peripheral clock enable */
     __HAL_RCC_USB_CLK_ENABLE();
