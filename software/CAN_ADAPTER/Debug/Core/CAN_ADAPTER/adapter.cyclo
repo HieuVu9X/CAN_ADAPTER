@@ -1,6 +1,0 @@
-../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_usart.h:2677:22:LL_USART_ConfigAsyncMode	1
-../Core/CAN_ADAPTER/adapter.c:35:6:Send_USART_OUT	4
-../Core/CAN_ADAPTER/adapter.c:60:6:USER_CDC_SetLineCoding	5
-../Core/CAN_ADAPTER/adapter.c:109:6:Can_Adapter_Init	1
-../Core/CAN_ADAPTER/adapter.c:124:6:Can_Adapter_Mainfunction	7
-../Core/CAN_ADAPTER/adapter.c:155:6:CDC_User_Rx	4

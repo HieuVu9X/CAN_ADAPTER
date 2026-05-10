@@ -1,5 +1,5 @@
-Core/CAN_ADAPTER/adapter.o: ../Core/CAN_ADAPTER/adapter.c \
- ../Core/CAN_ADAPTER/adapter.h ../Core/Inc/main.h \
+Core/COM_ADAPTER/uart_to_com.o: ../Core/COM_ADAPTER/uart_to_com.c \
+ ../Core/COM_ADAPTER/uart_to_com.h ../Core/Inc/main.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -50,8 +50,9 @@ Core/CAN_ADAPTER/adapter.o: ../Core/CAN_ADAPTER/adapter.c \
  ../USB_Device/Target/usbd_conf.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
- ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
-../Core/CAN_ADAPTER/adapter.h:
+ ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
+ C:/Users/Admin/OneDrive/Desktop/hieuvm/8.UAV_Project/CAN_ADAPTER/software/CAN_ADAPTER/Core/COM_ADAPTER/com_adapter.h
+../Core/COM_ADAPTER/uart_to_com.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -104,3 +105,4 @@ Core/CAN_ADAPTER/adapter.o: ../Core/CAN_ADAPTER/adapter.c \
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:
+C:/Users/Admin/OneDrive/Desktop/hieuvm/8.UAV_Project/CAN_ADAPTER/software/CAN_ADAPTER/Core/COM_ADAPTER/com_adapter.h:

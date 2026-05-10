@@ -17,7 +17,7 @@ RM := rm -rf
 -include Core/Template/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
--include Core/CAN_ADAPTER/subdir.mk
+-include Core/COM_ADAPTER/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -66,8 +66,8 @@ all: main-build
 main-build: CAN_ADAPTER.elf secondary-outputs
 
 # Tool invocations
-CAN_ADAPTER.elf CAN_ADAPTER.map: $(OBJS) $(USER_OBJS) C:\Users\Admin\Desktop\hieuvm\8.UAV_Project\CAN_ADAPTER\software\CAN_ADAPTER\STM32G431CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "CAN_ADAPTER.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Admin\Desktop\hieuvm\8.UAV_Project\CAN_ADAPTER\software\CAN_ADAPTER\STM32G431CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CAN_ADAPTER.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+CAN_ADAPTER.elf CAN_ADAPTER.map: $(OBJS) $(USER_OBJS) C:\Users\Admin\OneDrive\Desktop\hieuvm\8.UAV_Project\CAN_ADAPTER\software\CAN_ADAPTER\STM32G431CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "CAN_ADAPTER.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Admin\OneDrive\Desktop\hieuvm\8.UAV_Project\CAN_ADAPTER\software\CAN_ADAPTER\STM32G431CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CAN_ADAPTER.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

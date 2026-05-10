@@ -8,7 +8,8 @@
 /*--------------------------------------------------------------------------------
  *                                 Include Files
  -------------------------------------------------------------------------------*/
-#include "adapter.h"
+#include "uart_to_com.h"
+
 #include "usbd_cdc_if.h"
 /*--------------------------------------------------------------------------------
  *                              Constant Definitions
@@ -23,8 +24,6 @@ uint32_t out_wr_index =0, out_rd_index=0;
 uint8_t in_queue[QUEUE_BUF_SIZE];
 uint32_t in_wr_index =0, in_rd_index=0,in_pending;
 uint32_t usart_sr;
-//uint8_t test_buffer[14*8];
-//uint32_t test_index=0,decode_err=0;
 /*--------------------------------------------------------------------------------
  *                           Static Function Prototypes
  -------------------------------------------------------------------------------*/
@@ -36,23 +35,30 @@ void Send_USART_OUT()
 {
 	//Update rd id when DMA transfer not active
 	//Send when data pending
-	if(out_wr_index != out_rd_index){
+	if(out_wr_index != out_rd_index)
+	{
 		//Try start send data when DMA stoped
-		if((USART_TX_DMA_STREAM->CCR & DMA_CCR_EN)==0){
+		uint8_t isEnableChannel = LL_DMA_IsEnabledChannel(USART_TX_DMA, USART_TX_DMA_CHANEL);
+		uint32_t data_len;
+		uint32_t data_add;
+		if(isEnableChannel == 0) {
 			USART_TX_DMA_CLEAR_STATUS();
-			if(out_wr_index >  out_rd_index){
-				USART_TX_DMA_STREAM->CMAR = out_queue + out_rd_index;
-				USART_TX_DMA_STREAM->CNDTR = out_wr_index-out_rd_index;
-				USART_TX_DMA_STREAM->CPAR = &USART_PORT->RDR;
+			data_add = out_queue + out_rd_index;
+			if(out_wr_index >  out_rd_index)
+			{
+				data_len = out_wr_index - out_rd_index;
 				out_rd_index = out_wr_index;
 			}
 			else{
-				USART_TX_DMA_STREAM->CMAR = out_queue + out_rd_index;
-				USART_TX_DMA_STREAM->CNDTR = QUEUE_BUF_SIZE - out_rd_index;
-				USART_TX_DMA_STREAM->CPAR = &USART_PORT->RDR;
+				data_len = QUEUE_BUF_SIZE - out_rd_index;
 				out_rd_index = 0;
 			}
-			USART_TX_DMA_STREAM->CCR |= DMA_CCR_EN;
+
+			LL_DMA_SetDataLength(USART_TX_DMA, USART_TX_DMA_CHANEL, data_len);
+			LL_DMA_SetMemoryAddress(USART_TX_DMA, USART_TX_DMA_CHANEL, data_add);
+			LL_DMA_SetPeriphAddress(USART_TX_DMA, USART_TX_DMA_CHANEL, (uint32_t)(&USART_PORT->RDR));
+
+			LL_DMA_EnableChannel(USART_TX_DMA, USART_TX_DMA_CHANEL);
 		}
 	}
 }
@@ -77,11 +83,13 @@ void USER_CDC_SetLineCoding(uint32_t data_rate, uint8_t stop_bit, uint8_t parity
 	/* 6      | bDataBits  |   1   | Number Data bits (5, 6, 7, 8 or 16).          */
 	/*******************************************************************************/
 	LL_USART_InitTypeDef USART_InitStruct = {0};
-	//USART port
-	USART_TX_DMA_STREAM->CCR &= ~DMA_CCR_EN;
-	USART_RX_DMA_STREAM->CCR &= ~DMA_CCR_EN;
-	USART_PORT->CR1 &= ~ USART_CR1_UE;
+	// Clear Flag - Disable DMA and UART
+	LL_DMA_DisableChannel(USART_TX_DMA, USART_TX_DMA_CHANEL);
+	LL_DMA_DisableChannel(USART_RX_DMA, USART_RX_DMA_CHANEL);
 
+	LL_USART_Disable(USART_PORT);
+
+	//----- Config USART port-----//
 	USART_InitStruct.BaudRate = data_rate;
 	USART_InitStruct.DataWidth = parity?LL_USART_DATAWIDTH_9B:LL_USART_DATAWIDTH_8B;
 	USART_InitStruct.StopBits = (stop_bit==0)?LL_USART_STOPBITS_1: LL_USART_STOPBITS_2;
@@ -90,35 +98,41 @@ void USER_CDC_SetLineCoding(uint32_t data_rate, uint8_t stop_bit, uint8_t parity
 	USART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;
 	USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_16;
 
-	//-----USART port-----//
 	LL_USART_Init(USART_PORT, &USART_InitStruct);
 	LL_USART_ConfigAsyncMode(USART_PORT);
-	USART_PORT->CR3 |= USART_CR3_DMAR| USART_CR3_DMAT;
 
 	//Start RX DMA
-	USART_RX_DMA_STREAM->CCR &= ~ DMA_CCR_EN;
-	USART_RX_DMA_STREAM->CNDTR = QUEUE_BUF_SIZE;
-	USART_RX_DMA_STREAM->CMAR = (uint32_t)in_queue;
-	USART_RX_DMA_STREAM->CPAR = (uint32_t)&USART_PORT->RDR;
-	//START USART
-	USART_PORT->CR1 |= USART_CR1_UE|USART_CR1_TE|USART_CR1_RE;
-	USART_RX_DMA_STREAM->CCR |= DMA_CCR_EN;
+	LL_DMA_DisableChannel(USART_RX_DMA, USART_RX_DMA_CHANEL);
+	LL_DMA_SetDataLength(USART_RX_DMA, USART_RX_DMA_CHANEL, QUEUE_BUF_SIZE);
+	LL_DMA_SetMemoryAddress(USART_RX_DMA, USART_RX_DMA_CHANEL, (uint32_t)in_queue);
+	LL_DMA_SetPeriphAddress(USART_RX_DMA, USART_RX_DMA_CHANEL, (uint32_t)(&USART_PORT->RDR));
+	LL_DMA_EnableChannel(USART_RX_DMA, USART_RX_DMA_CHANEL);
 
+	//START USART
+	LL_USART_EnableDirectionTx(USART_PORT);
+	LL_USART_EnableDirectionRx(USART_PORT);
+	LL_USART_EnableDMAReq_RX(USART_PORT);
+	LL_USART_EnableDMAReq_TX(USART_PORT);
+	LL_USART_Enable(USART_PORT);
 }
 
 void Can_Adapter_Init(void)
 {
-	// Config USART1 receive data
-	USART_PORT->CR1 &= USART_CR1_UE;
-	USART_PORT->CR3 |= USART_CR3_DMAR| USART_CR3_DMAT;
-	//Start RX DMA
-	USART_RX_DMA_STREAM->CCR &= ~ DMA_CCR_EN;
-	USART_RX_DMA_STREAM->CNDTR = QUEUE_BUF_SIZE;
-	USART_RX_DMA_STREAM->CMAR = (uint32_t)in_queue;
-	USART_RX_DMA_STREAM->CPAR = (uint32_t)&USART_PORT->RDR;
+	/**** Config USART1 receive data ****/
+	// Start RX DMA
+	LL_DMA_DisableChannel(USART_RX_DMA, USART_RX_DMA_CHANEL);
+	LL_DMA_SetDataLength(USART_RX_DMA, USART_RX_DMA_CHANEL, QUEUE_BUF_SIZE);
+	LL_DMA_SetMemoryAddress(USART_RX_DMA, USART_RX_DMA_CHANEL, (uint32_t)in_queue);
+	LL_DMA_SetPeriphAddress(USART_RX_DMA, USART_RX_DMA_CHANEL, (uint32_t)(&USART_PORT->RDR));
+	LL_DMA_EnableChannel(USART_RX_DMA, USART_RX_DMA_CHANEL);
 
-	USART_RX_DMA_STREAM->CCR |= DMA_CCR_EN;
-	USART_PORT->CR1 |= USART_CR1_UE|USART_CR1_TE|USART_CR1_RE;
+	// Start UART
+	LL_USART_Disable(USART_PORT);
+	LL_USART_EnableDirectionTx(USART_PORT);
+	LL_USART_EnableDirectionRx(USART_PORT);
+	LL_USART_EnableDMAReq_RX(USART_PORT);
+	LL_USART_EnableDMAReq_TX(USART_PORT);
+	LL_USART_Enable(USART_PORT);
 }
 
 void Can_Adapter_Mainfunction(void)
@@ -130,8 +144,7 @@ void Can_Adapter_Mainfunction(void)
 
 	/*** send data from uart to usb ***/
 	usart_sr = USART1->ISR;
-	uint32_t dma_cnt = USART_RX_DMA_STREAM->CNDTR;
-
+	uint32_t dma_cnt = LL_DMA_GetDataLength(USART_RX_DMA, USART_RX_DMA_CHANEL);
 	in_wr_index = QUEUE_BUF_SIZE - dma_cnt;
 	if(in_wr_index >=QUEUE_BUF_SIZE ) in_wr_index = QUEUE_BUF_SIZE-1;
 	in_pending = (in_wr_index >= in_rd_index)? in_wr_index - in_rd_index: in_wr_index + QUEUE_BUF_SIZE - in_rd_index;
@@ -151,7 +164,8 @@ void Can_Adapter_Mainfunction(void)
 	}
 }
 
-void CDC_User_Rx(uint8_t* data, uint32_t len){
+void CDC_User_Rx(uint8_t* data, uint32_t len)
+{
 	while(len-->0){
 		uint32_t wr_next = out_wr_index+1;
 		if(wr_next >= QUEUE_BUF_SIZE) wr_next = 0;

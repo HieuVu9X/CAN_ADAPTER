@@ -41,7 +41,8 @@ USB_Device/App/usb_device.o: ../USB_Device/App/usb_device.c \
  ../USB_Device/App/usbd_desc.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
- ../USB_Device/App/usbd_cdc_if.h
+ ../USB_Device/App/usbd_cdc_if.h \
+ C:/Users/Admin/OneDrive/Desktop/hieuvm/8.UAV_Project/CAN_ADAPTER/software/CAN_ADAPTER/Core/COM_ADAPTER/com_adapter.h
 ../USB_Device/App/usb_device.h:
 ../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h:
 ../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h:
@@ -85,3 +86,4 @@ USB_Device/App/usb_device.o: ../USB_Device/App/usb_device.c \
 ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h:
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:
 ../USB_Device/App/usbd_cdc_if.h:
+C:/Users/Admin/OneDrive/Desktop/hieuvm/8.UAV_Project/CAN_ADAPTER/software/CAN_ADAPTER/Core/COM_ADAPTER/com_adapter.h:

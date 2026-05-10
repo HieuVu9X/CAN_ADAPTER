@@ -1,4 +1,6 @@
-"./Core/CAN_ADAPTER/adapter.o"
+"./Core/COM_ADAPTER/can_to_com.o"
+"./Core/COM_ADAPTER/com_adapter.o"
+"./Core/COM_ADAPTER/uart_to_com.o"
 "./Core/Src/main.o"
 "./Core/Src/stm32g4xx_hal_msp.o"
 "./Core/Src/stm32g4xx_it.o"
